@@ -5,7 +5,6 @@ class myDataset(Dataset):
 
     def __init__(self, csv_file):
         self.csv_data = read_csv(csv_file)
-        return
 
     def __len__(self):
         return len(self.csv_data)
