@@ -62,7 +62,6 @@ if __name__ == '__main__':
         print('Epoch {}/{}, loss: {:.6f}'.format(epoch + 1, epochs,
                                                  loss.data[0]))
 
-
     # Predict
     model.eval()
     y_predict = model(Variable(x_train))
