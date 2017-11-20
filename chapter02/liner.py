@@ -62,3 +62,13 @@ if __name__ == '__main__':
         print('Epoch {}/{}, loss: {:.6f}'.format(epoch + 1, epochs,
                                                  loss.data[0]))
 
+
+    # Predict
+    model.eval()
+    y_predict = model(Variable(x_train))
+    y_predict = y_predict.data.numpy()
+
+    # plot for train data and predict line
+    plt.plot(x_train.numpy(), y_train.numpy(), 'ro', label='Original Data')
+    plt.plot(x_train.numpy(), y_predict, label='Fitting Line')
+    plt.show()
