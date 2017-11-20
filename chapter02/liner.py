@@ -70,4 +70,5 @@ if __name__ == '__main__':
     # plot for train data and predict line
     plt.plot(x_train.numpy(), y_train.numpy(), 'ro', label='Original Data')
     plt.plot(x_train.numpy(), y_predict, label='Fitting Line')
+    plt.legend()
     plt.show()
