@@ -1,10 +1,9 @@
 import random
-import numpy as np
 import torch
 from torch import nn
 from torch import optim
 from torch.autograd import Variable
-from matplotlib import pyplot as plt
+
 
 batch_size = 32
 lr = 1e-3
