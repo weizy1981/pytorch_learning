@@ -28,6 +28,7 @@ class LogisticLinear(nn.Module):
         out = self.linear(x)
         out = self.softmax(out)
         return out
+
 def createTensorDataset(x, y):
     # convert data to Tensors
     x = torch.FloatTensor(x)
