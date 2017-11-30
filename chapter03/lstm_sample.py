@@ -7,6 +7,7 @@ import torch
 from pandas import read_csv, get_dummies, concat, DataFrame
 from datetime import datetime
 from sklearn.preprocessing import MinMaxScaler
+from matplotlib import pyplot as plt
 
 filename = 'pollution_original.csv'
 time_step = 24
@@ -14,6 +15,7 @@ batch_size = 128
 epochs = 1
 lr = 0.01
 feature = 11
+train_len = 24 * 365 * 4
 
 # combine the datetime
 def prase(x):
@@ -92,7 +94,7 @@ if __name__ == '__main__':
 
     # create dataset for lstm
     dataset = make_dataset(data, n_input=time_step)
-    dataset = dataset[0:365]
+    dataset = dataset[0:train_len]
 
     # create Tensor Dataset
     dataset = createTensorDataset(dataset)
@@ -132,3 +134,8 @@ if __name__ == '__main__':
     y = dataset.target_tensor.numpy()
     outputs = model(x)
     outputs = outputs.data.numpy()
+
+    plt.plot(y, color='blue', label='Actual')
+    plt.plot(outputs, color='green', label='Prediction')
+    plt.legend(loc='upper right')
+    plt.show()
