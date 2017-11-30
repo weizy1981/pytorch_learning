@@ -13,11 +13,11 @@ seed = 7
 lr = 0.01
 momentum = 0.9
 
-class LogisticLinear(nn.Module):
+class MLPSample(nn.Module):
 
     # define the model for iris flower dataset
     def __init__(self):
-        super(LogisticLinear, self).__init__()
+        super(MLPSample, self).__init__()
         self.linear = nn.Sequential()
         self.linear.add_module('input', nn.Linear(4, 4))
         self.linear.add_module('hidden1', nn.Linear(4, 6))
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     np.random.seed(seed=seed)
 
     # create model
-    model = LogisticLinear()
+    model = MLPSample()
 
     # define the loss function and optimizer
     criterion = nn.BCELoss()
