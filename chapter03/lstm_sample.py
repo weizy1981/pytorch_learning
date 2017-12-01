@@ -11,8 +11,8 @@ from matplotlib import pyplot as plt
 
 filename = 'pollution_original.csv'
 time_step = 24
-batch_size = 12000
-epochs = 1
+batch_size = 120
+epochs = 50
 lr = 0.01
 feature = 11
 train_len = 41000
