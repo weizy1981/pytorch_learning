@@ -11,11 +11,11 @@ from matplotlib import pyplot as plt
 
 filename = 'pollution_original.csv'
 time_step = 24
-batch_size = 128
+batch_size = 12000
 epochs = 1
 lr = 0.01
 feature = 11
-train_len = 24 * 365 * 4
+train_len = 41000
 
 # combine the datetime
 def prase(x):
@@ -94,10 +94,12 @@ if __name__ == '__main__':
 
     # create dataset for lstm
     dataset = make_dataset(data, n_input=time_step)
-    dataset = dataset[0:train_len]
+    train_set = dataset[0:train_len]
+    test_set = dataset[train_len:len(dataset)]
+
 
     # create Tensor Dataset
-    dataset = createTensorDataset(dataset)
+    train_set = createTensorDataset(train_set)
 
     model = LSTMPollution()
 
@@ -105,9 +107,10 @@ if __name__ == '__main__':
     criterion = nn.MSELoss()
     optimizer = optim.Adam(params=model.parameters(), lr=lr)
 
-    dataloader = DataLoader(dataset=dataset, batch_size=batch_size)
+    dataloader = DataLoader(dataset=train_set, batch_size=batch_size)
     # training the model
     for epoch in range(epochs):
+        losses = []
         for (data, label) in dataloader:
             # convert to variable
             data = Variable(data)
@@ -118,6 +121,7 @@ if __name__ == '__main__':
             # calculate the loss
             loss = criterion(output, label)
             loss_data = loss.data[0]
+            losses.append(loss_data)
 
             # reset gradients
             optimizer.zero_grad()
@@ -125,16 +129,19 @@ if __name__ == '__main__':
             loss.backward()
             optimizer.step()
 
-            # print loss
-            print('{}/{} loss: {:.6f}'.format(epoch + 1, epochs, loss_data))
+        # print loss
+        print('epoch {}/{} loss: {:.6f}'.format(epoch + 1, epochs, np.mean(losses)))
 
+    # evaluate new data
     model.eval()
-    x = dataset.data_tensor
-    x = Variable(x)
-    y = dataset.target_tensor.numpy()
+    # create Tensor Dataset
+    test_set = createTensorDataset(test_set)
+    x = Variable(test_set.data_tensor)
+    y = test_set.target_tensor.numpy()
     outputs = model(x)
     outputs = outputs.data.numpy()
 
+    # create plot to show the predict result
     plt.plot(y, color='blue', label='Actual')
     plt.plot(outputs, color='green', label='Prediction')
     plt.legend(loc='upper right')
