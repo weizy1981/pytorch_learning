@@ -2,7 +2,6 @@ from torch import nn
 from torch.nn import functional as F
 from torch.autograd import Variable
 from torch import optim
-import numpy as np
 import torch
 from torchvision import transforms
 from torch.utils.data import Dataset, DataLoader
