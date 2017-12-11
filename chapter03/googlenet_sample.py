@@ -1,5 +1,4 @@
 from torch import nn
-from torch.nn import functional as F
 from torch.autograd import Variable
 from torch import optim
 import torch
@@ -132,12 +131,12 @@ class MyDataset(Dataset):
         self.loader = loader
 
     def __getitem__(self, index):
-        fn, label = self.imgs[index]
+        fn, target = self.imgs[index]
         img = self.loader(fn)
         if self.transform is not None:
             img = self.transform(img)
-        label = torch.from_numpy(label)
-        return img,label
+            target = torch.from_numpy(target)
+        return img, target
 
     def __len__(self):
         return len(self.imgs)
