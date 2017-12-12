@@ -4,9 +4,8 @@ from torch import optim
 import torch
 from torchvision import transforms
 from torchvision.datasets.folder import ImageFolder
-from torch.utils.data import Dataset, DataLoader
-from PIL import Image
-from sklearn.preprocessing import OneHotEncoder
+from torchvision import datasets
+from torch.utils.data import DataLoader
 
 
 train_folder = 'data/train'
@@ -110,12 +109,15 @@ class GoogLeNet(nn.Module):
 
 if __name__ == '__main__':
 
-    transform = transforms.Compose([transforms.ToTensor(),
-                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+    trans_img = transforms.Compose([
+        transforms.ToTensor()
+    ])
 
     # 像素为3x2304x3456
-    train_dataset = ImageFolder(train_folder, transform=transform)
-    test_dataset = ImageFolder(test_folder, transform=transform)
+    train_dataset = ImageFolder(train_folder, transform=trans_img)
+    test_dataset = ImageFolder(test_folder, transform=trans_img)
+    #train_dataset = datasets.CIFAR10('./cifar', download=True, transform=trans_img, train=True)
+    #test_dataset = datasets.CIFAR10('./cifar', download=True, transform=trans_img, train=False)
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
 
@@ -127,6 +129,7 @@ if __name__ == '__main__':
     optimizer = optim.SGD(model.parameters(), lr=lr)
 
     # 训练模型
+    model.train()
     for i in range(epochs):
         running_loss = 0.0
         running_acc = 0.0
