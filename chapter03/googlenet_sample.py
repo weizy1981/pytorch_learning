@@ -108,41 +108,6 @@ class GoogLeNet(nn.Module):
         out = self.linear(out)
         return out
 
-def default_loader(path):
-    return Image.open(path).convert('RGB')
-
-class MyDataset(Dataset):
-    def __init__(self, label_file, img_folder, transform=None, target_transform=None, loader=default_loader):
-        imgs = []
-
-        with open(label_file, 'r') as fh:
-            lines = fh.readlines()
-            for line in lines:
-                line = line.strip('\n')
-                line = line.rstrip()
-                words = line.split(',')
-                img = img_folder + '/' + words[0]
-                encoder = OneHotEncoder(n_values=5, sparse=False)
-                label = encoder.fit_transform(int(words[1]))
-                imgs.append((img, label))
-
-        self.imgs = imgs
-        self.transform = transform
-        self.target_transform = transforms.Compose([target_transform,
-                                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-        self.loader = loader
-
-    def __getitem__(self, index):
-        fn, target = self.imgs[index]
-        img = self.loader(fn)
-        if self.transform is not None:
-            img = self.transform(img)
-            target = torch.from_numpy(target)
-        return img, target
-
-    def __len__(self):
-        return len(self.imgs)
-
 if __name__ == '__main__':
 
     transform = transforms.Compose([transforms.ToTensor(),
