@@ -3,13 +3,14 @@ from torch.autograd import Variable
 from torch import optim
 import torch
 from torchvision import transforms
+from torchvision.datasets.folder import ImageFolder
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 from sklearn.preprocessing import OneHotEncoder
 
-train_labels = 'train_labels.csv'
-test_labels = 'test_labels.csv'
-img_folder = 'train'
+
+train_folder = 'data/train'
+test_folder = 'data/test'
 batch_size = 64
 epochs = 200
 lr = 0.01
@@ -144,9 +145,12 @@ class MyDataset(Dataset):
 
 if __name__ == '__main__':
 
+    transform = transforms.Compose([transforms.ToTensor(),
+                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+
     # 像素为3x2304x3456
-    train_dataset = MyDataset(label_file=train_labels, img_folder=img_folder, transform=transforms.ToTensor())
-    test_dataset = MyDataset(label_file=train_labels, img_folder=img_folder, transform=transforms.ToTensor())
+    train_dataset = ImageFolder(train_folder, transform=transform)
+    test_dataset = ImageFolder(test_folder, transform=transform)
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
 
