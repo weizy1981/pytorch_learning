@@ -127,7 +127,8 @@ class MyDataset(Dataset):
 
         self.imgs = imgs
         self.transform = transform
-        self.target_transform = target_transform
+        self.target_transform = transforms.Compose([target_transform,
+                                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
         self.loader = loader
 
     def __getitem__(self, index):
